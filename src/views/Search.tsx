@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePGlite } from '@electric-sql/pglite-react';
 import {  useNavigate } from 'react-router-dom';
+import { onBroadcastChange } from '../utitlites/pglite-broadcast';
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +36,13 @@ export default function SearchPage() {
   useEffect(() => {
     fetchPatients();
   }, []);
+
+  useEffect(()=>{
+    onBroadcastChange(async (event)=>{
+     window.location.reload();
+      
+    })
+  },[])
 
   const handleRedirectToPatient=(id: number)=>{
     navigate(`/p/${id}`)
