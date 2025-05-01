@@ -62,3 +62,4 @@ Powered by [`@electric-sql/pglite`](https://github.com/electric-sql/pglite), the
 
 ```bash
 npm install
+npm run dev

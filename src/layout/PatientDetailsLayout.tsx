@@ -40,7 +40,8 @@ export default function PatientDetailsLayout() {
     }, [db, params.patientId]);
 
      useEffect(()=>{
-        onBroadcastChange(async (event)=>{
+        onBroadcastChange(async ()=>{
+         
          window.location.reload();
           
         })

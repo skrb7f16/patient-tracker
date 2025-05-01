@@ -44,6 +44,7 @@ async function initApp() {
       preliminary_diagnosis TEXT
     );
   `);
+ 
 
   const rootEl = document.getElementById('root');
   if (!rootEl) throw new Error('Root element not found');

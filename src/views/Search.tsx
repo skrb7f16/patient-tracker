@@ -38,7 +38,7 @@ export default function SearchPage() {
   }, []);
 
   useEffect(()=>{
-    onBroadcastChange(async (event)=>{
+    onBroadcastChange(async ()=>{
      window.location.reload();
       
     })
