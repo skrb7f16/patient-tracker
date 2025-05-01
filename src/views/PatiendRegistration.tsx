@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BasicInfoForm from '../components/BasicInfoForm';
 import MedicalDetailsForm from '../components/MedicalDetailsForm';
 import { usePGlite } from '@electric-sql/pglite-react';
@@ -23,7 +23,6 @@ export default function PatientRegistration() {
     console.log('Saving patient to DB:', finalData);
     let patientId =  -1;
     try {
-      // Insert patient and get last inserted row ID
 
       const name = escape(finalData.name);
       const age = parseInt(finalData.age);
@@ -45,8 +44,8 @@ export default function PatientRegistration() {
         const diseases = escape(finalData.diseases);
 
         await db.exec(`
-        INSERT INTO medical_details (patient_id, blood_group, medical_history, allergies, diseases)
-        VALUES (${patientId}, '${bloodGroup}', '${medicalHistory}', '${allergies}', '${diseases}')
+        INSERT INTO medical_details (patient_id, blood_group, medical_history, allergies, diseases, attending_doctor, consulted, preliminary_diagnosis)
+        VALUES (${patientId}, '${bloodGroup}', '${medicalHistory}', '${allergies}', '${diseases}', '${null}', ${false}, '${null}')
         `);
 
         alert('Patient Registered!');

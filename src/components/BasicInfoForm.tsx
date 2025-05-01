@@ -19,9 +19,9 @@ export default function BasicInfoForm({ onNext }: Props) {
     const errs: Record<string, string> = {};
 
     if (!formData.name.trim()) errs.name = 'Name is required.';
-    if (!formData.age || parseInt(formData.age) <= 0) errs.age = 'Enter a valid age.';
+    if (!formData.age || parseInt(formData.age) <= 0 ) errs.age = 'Enter a valid age.';
     if (!formData.gender) errs.gender = 'Gender is required.';
-    if (!formData.phone.match(/^\d{10}$/)) errs.phone = 'Phone must be 10 digits.';
+    if (!formData.phone.match(/^\d{10}$/)) errs.phone = 'Phone must be valid.';
     if (!formData.address.trim()) errs.address = 'Address is required.';
 
     setErrors(errs);
@@ -29,10 +29,10 @@ export default function BasicInfoForm({ onNext }: Props) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: any
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' }); // Clear error on change
+    setErrors({ ...errors, [e.target.name]: '' }); 
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -83,6 +83,8 @@ export default function BasicInfoForm({ onNext }: Props) {
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
             placeholder="9876543210"
+            maxLength={10}
+            type='tel'
           />
           {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
         </div>

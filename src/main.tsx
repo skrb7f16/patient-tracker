@@ -37,7 +37,10 @@ async function initApp() {
       blood_group TEXT,
       medical_history TEXT,
       allergies TEXT,
-      diseases TEXT
+      diseases TEXT,
+      attending_doctor TEXT,
+      consulted BOOLEAN DEFAULT false,
+      preliminary_diagnosis TEXT
     );
   `);
 

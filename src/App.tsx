@@ -4,7 +4,7 @@ import './index.css'
 function App() {
 
   return (
-    <div className='bg-red-200'>
+    <div >
       <Outlet />
     </div>
   )
