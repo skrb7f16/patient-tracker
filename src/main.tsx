@@ -11,11 +11,12 @@ import router from './router';
 async function initApp() {
   const db = await PGlite.create({
     extensions: { live },
+    dataDir: 'idb://patients-record',
   });
 
   // Drop tables if they exist (for dev reset)
-  await db.exec(`DROP TABLE IF EXISTS medical_details;`);
-  await db.exec(`DROP TABLE IF EXISTS patients;`);
+  // await db.exec(`DROP TABLE IF EXISTS medical_details;`);
+  // await db.exec(`DROP TABLE IF EXISTS patients;`);
 
   // Create patients table
   await db.exec(`
