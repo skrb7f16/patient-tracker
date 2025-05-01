@@ -1,54 +1,64 @@
-# React + TypeScript + Vite
+# 🏥 Patient Registration App (React + PGlite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a lightweight offline-first **patient registration web application** built with **React**, **PGlite (SQLite in the browser)**, and **React Router**. It allows healthcare staff to:
 
-Currently, two official plugins are available:
+- Register new patients via a two-step form
+- Record medical history
+- Search and view existing patients
+- Work across multiple browser tabs with real-time sync
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔧 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Two-tab layout:
+  - **Add Patient**: A two-part form for personal info and medical details
+  - **Search Patient**: Lookup patients and view full details
+- Offline-ready using PGlite + IndexedDB
+- Multi-tab data synchronization
+- Broadcast-based communication to auto-refresh or reload tabs when new patients are added
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📁 Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🗄️ Database Schema
+
+Powered by [`@electric-sql/pglite`](https://github.com/electric-sql/pglite), the schema includes two tables: `patients` and `medical_details`.
+
+### `patients` Table
+
+| Column   | Type    | Description                 |
+|----------|---------|-----------------------------|
+| `id`     | SERIAL  | Primary key                 |
+| `name`   | TEXT    | Patient's full name         |
+| `age`    | INTEGER | Age                         |
+| `gender` | TEXT    | Gender                      |
+| `phone`  | TEXT    | Contact number              |
+| `address`| TEXT    | Full residential address     |
+
+### `medical_details` Table
+
+| Column                 | Type     | Description                                  |
+|------------------------|----------|----------------------------------------------|
+| `id`                   | SERIAL   | Primary key                                  |
+| `patient_id`           | INTEGER  | Foreign key referencing `patients(id)`       |
+| `blood_group`          | TEXT     | A+, B-, etc.                                 |
+| `medical_history`      | TEXT     | Past illnesses, surgeries, etc.              |
+| `allergies`            | TEXT     | Known allergies                              |
+| `diseases`             | TEXT     | Chronic or diagnosed diseases                |
+| `attending_doctor`     | TEXT     | Doctor assigned to the patient               |
+| `consulted`            | BOOLEAN  | Whether the patient has been seen (default: false) |
+| `preliminary_diagnosis`| TEXT     | Doctor's initial diagnosis or notes          |
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Install dependencies
+
+```bash
+npm install
