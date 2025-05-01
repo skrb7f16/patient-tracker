@@ -16,14 +16,21 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'add',
-                element: <PatientRegistration />
+                element: <PatientRegistration />,
+            
               },
               {
                 path: 'search',
                 element: <Search />
+              },
+              {
+                path: '',
+                index: true,
+                element: <PatientRegistration />,
               }
             ]
         },
+       
         {
           path: '/p/:patientId',
           element: <PatientDetailsLayout />

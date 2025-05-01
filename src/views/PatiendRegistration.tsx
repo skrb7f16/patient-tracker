@@ -3,6 +3,7 @@ import BasicInfoForm from '../components/BasicInfoForm';
 import MedicalDetailsForm from '../components/MedicalDetailsForm';
 import { usePGlite } from '@electric-sql/pglite-react';
 import ResultPage from '../components/RegistrationResult';
+import { broadcastChange } from '../utitlites/pglite-broadcast';
 
 export default function PatientRegistration() {
   const [step, setStep] = useState(1);
@@ -50,7 +51,9 @@ export default function PatientRegistration() {
 
         alert('Patient Registered!');
         setSubmissionStatus('success')
-
+        broadcastChange('db-updated', {
+          type: 'patient-added'
+        });
       }
 
     }

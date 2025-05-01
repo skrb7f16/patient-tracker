@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { usePGlite } from '@electric-sql/pglite-react';
+import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcast';
 
 export default function PatientDetailsLayout() {
     const params = useParams();
@@ -37,6 +38,13 @@ export default function PatientDetailsLayout() {
     useEffect(() => {
         fetchPatient();
     }, [db, params.patientId]);
+
+     useEffect(()=>{
+        onBroadcastChange(async (event)=>{
+         window.location.reload();
+          
+        })
+      },[])
     const handleSave = async () => {
         if (patient && medical) {
           try {
@@ -46,7 +54,7 @@ export default function PatientDetailsLayout() {
               WHERE patient_id = ${patient.id};
             `);
             setShowSideBar(false); // Close the sidebar
-    
+            broadcastChange('db-updated')
             await fetchPatient()
           } catch (error) {
             console.error('Error updating medical details:', error);
@@ -76,18 +84,17 @@ export default function PatientDetailsLayout() {
                 </div>
             </div>
 
-            {/* Right Panel: Medical Info */}
             <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
                 <h2 className="text-2xl font-semibold mb-4">Medical Details</h2>
                 {medical ? (
                     <><div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Blood Group */}
+         
                         <div className="bg-white p-4 rounded-xl shadow">
                             <h3 className="text-lg font-bold mb-2">Blood Group</h3>
                             <p className="text-gray-700">{medical.blood_group || 'N/A'}</p>
                         </div>
 
-                        {/* Medical History */}
+               
                         <div className="bg-white p-4 rounded-xl shadow">
                             <h3 className="text-lg font-bold mb-2">Medical History</h3>
                             {medical.medical_history ? (
@@ -102,7 +109,7 @@ export default function PatientDetailsLayout() {
                             )}
                         </div>
 
-                        {/* Allergies */}
+             
                         <div className="bg-white p-4 rounded-xl shadow">
                             <h3 className="text-lg font-bold mb-2">Allergies</h3>
                             {medical.allergies ? (
@@ -167,7 +174,7 @@ export default function PatientDetailsLayout() {
           >
             <h2 className="text-xl font-semibold mb-4">Update Medical Status</h2>
 
-            {/* Form Fields */}
+  
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium">Attending Doctor</label>
