@@ -192,7 +192,8 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
                                 <div className='flex flex-col gap-1'>
                                     <button
                                         onClick={() => handleEditToggle(index)}
-                                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full"
+                                        // className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full"
+                                        className="px-3 py-1 text-sm text-green-700 border border-green-600 rounded hover:bg-green-50 transition"
                                     >
                                         {editingIndex === index ? 'Save' : 'Edit'}
                                     </button>
@@ -200,7 +201,8 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
                                         !(editingIndex !== -1) &&
                                         <button
                                             onClick={() => handleDeleteRow(index)}
-                                            className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600  w-full"
+                                            // className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600  w-full"
+                                            className="px-3 py-1 text-sm text-red-700 border border-red-600 rounded hover:bg-red-50 transition"
                                         >
                                             Delete
                                         </button>
