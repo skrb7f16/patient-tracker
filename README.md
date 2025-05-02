@@ -17,6 +17,13 @@ This is a lightweight offline-first **patient registration web application** bui
 - Offline-ready using PGlite + IndexedDB
 - Multi-tab data synchronization
 - Broadcast-based communication to auto-refresh or reload tabs when new patients are added
+- **Medication Management**
+  - Editable medication schedule table per patient.
+  - Auto-calculated `end_date` based on `start_date + no_of_days`.
+
+- **Multi-tab support**: Data remains reactive across browser tabs.
+- **IndexedDB storage** using PGlite (`idb://patients-record`).
+- **Styled with Tailwind CSS**.
 
 ---
 
@@ -55,6 +62,16 @@ Powered by [`@electric-sql/pglite`](https://github.com/electric-sql/pglite), the
 | `preliminary_diagnosis`| TEXT     | Doctor's initial diagnosis or notes          |
 
 ---
+### `medicine engagment` Table
+| Column Name     | Data Type | Constraints                  | Description                                             |
+|------------------|------------|------------------------------|---------------------------------------------------------|
+| `id`             | SERIAL     | PRIMARY KEY                  | Unique identifier for each medication entry             |
+| `patient_id`     | INTEGER    | REFERENCES patients(id)      | Links medication to a specific patient                  |
+| `medicine_name`  | TEXT       |                              | Name of the prescribed medicine                         |
+| `dose_per_day`   | INTEGER    |                              | Number of doses to be taken per day                     |
+| `no_of_days`     | INTEGER    |                              | Duration in days for the medication                     |
+| `start_date`     | DATE       |                              | Date when the medication starts                         |
+| `end_date`       | DATE       |                              | Computed date when the medication ends                  |
 
 ## 🚀 Setup Instructions
 
@@ -63,3 +80,6 @@ Powered by [`@electric-sql/pglite`](https://github.com/electric-sql/pglite), the
 ```bash
 npm install
 npm run dev
+
+```bash
+docker build -t patient-records .
