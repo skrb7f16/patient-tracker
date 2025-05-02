@@ -6,12 +6,13 @@ import { formatDate } from './helpers';
 export class PatientsProvider {
   private static instance: PatientsProvider;
   private db: PGliteWithLive;
+  private totalPatients=0;
 
   private constructor(db: PGliteWithLive) {
     this.db = db;
   }
 
-  // Singleton initializer
+
   public static init(db: PGliteWithLive): PatientsProvider {
     if (!PatientsProvider.instance) {
       PatientsProvider.instance = new PatientsProvider(db);
@@ -19,7 +20,7 @@ export class PatientsProvider {
     return PatientsProvider.instance;
   }
 
-  // Get the existing instance
+
   public static getInstance(): PatientsProvider {
     if (!PatientsProvider.instance) {
       throw new Error('PatientsProvider instance not initialized. Call PatientsProvider.init(db) first.');
@@ -27,15 +28,20 @@ export class PatientsProvider {
     return PatientsProvider.instance;
   }
 
-  // Dummy method: Get all patients
-  public async fetchPatients(searchTerm?: string) {
+
+  public async fetchPatients(searchTerm?: string, offset: number=-1) {
     let query = `SELECT * FROM patients`;
 
 
     if (searchTerm && searchTerm.length > 0) {
-      query += ` WHERE LOWER(name) LIKE LOWER('%${searchTerm}%') OR phone LIKE LOWER('%${searchTerm}%');`;
+      query += ` WHERE LOWER(name) LIKE LOWER('%${searchTerm}%') OR phone LIKE LOWER('%${searchTerm}%')`;
 
     }
+    if(offset != -1){
+      query+=` limit 10 offset ${offset};`
+    }
+
+    console.log(query, offset)
 
 
     return this.db.query(query);
@@ -58,6 +64,15 @@ export class PatientsProvider {
 
   public async findPatientById(id: any) {
     return this.db.query(`SELECT * FROM patients WHERE id = ${id};`);
+  }
+
+  public async updateTotalPatients() {
+    const result: any = await this.db.query(`SELECT COUNT(*) as total FROM patients;`)
+    this.totalPatients = result.rows[0].total || 0;
+  }
+
+  public getTotalPatients(){
+    return this.totalPatients;
   }
 }
 

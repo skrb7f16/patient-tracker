@@ -1,4 +1,3 @@
-import { usePGlite } from '@electric-sql/pglite-react';
 import React, { useEffect, useState } from 'react';
 import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcast';
 import { MedicationScheduleProvider } from '../utitlites/queries';
@@ -7,7 +6,7 @@ import { formatDate } from '../utitlites/helpers';
 const MedicationSchedule = ({ medical }: { medical: any }) => {
 
     const [editingIndex, setEditingIndex] = useState(-1);
-    const db = usePGlite();
+
     const [medicationData, setMedicationData] = useState<any[]>([]);
 
     useEffect(() => {
@@ -89,7 +88,7 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
         const deleteData=medicationData[index];
         if(deleteData && deleteData.id){
             try {
-                await db.query(`delete from medication_schedule where id = ${deleteData.id};`)
+                await MedicationScheduleProvider.getInstance().deleteMedication(deleteData.id)
                 broadcastChange('db-updated');
                 await fetchMedicines()
             }catch {

@@ -15,11 +15,6 @@ async function initApp() {
     dataDir: 'idb://patients-record',
   });
 
-  // Drop tables if they exist (for dev reset)
-  // await db.exec(`DROP TABLE IF EXISTS medical_details;`);
-  // await db.exec(`DROP TABLE IF EXISTS patients;`);
-
-  // Create patients table
   await db.exec(`
     CREATE TABLE IF NOT EXISTS patients (
       id SERIAL PRIMARY KEY,
@@ -35,7 +30,7 @@ async function initApp() {
   await db.exec(`
     CREATE TABLE IF NOT EXISTS medical_details (
       id SERIAL PRIMARY KEY,
-      patient_id INTEGER REFERENCES patients(id),
+      patient_id INTEGER REFERENCES patients(id) on delete cascade,
       blood_group TEXT,
       medical_history TEXT,
       allergies TEXT,
@@ -49,7 +44,7 @@ async function initApp() {
   await db.exec(`
     CREATE TABLE IF NOT EXISTS medication_schedule (
   id SERIAL PRIMARY KEY,
-  patient_id INTEGER REFERENCES patients(id),
+  patient_id INTEGER REFERENCES patients(id) on delete cascade,
   medicine_name TEXT ,
   dose_per_day INTEGER ,
   no_of_days INTEGER ,
@@ -58,6 +53,7 @@ async function initApp() {
 );
 `)
   PatientsProvider.init(db);
+  await PatientsProvider.getInstance().updateTotalPatients()
   MedicalDetailsprovider.init(db);
   MedicationScheduleProvider.init(db)
   const rootEl = document.getElementById('root');

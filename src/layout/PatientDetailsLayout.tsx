@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { usePGlite } from '@electric-sql/pglite-react';
 import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcast';
 import PatientBasicDetails from '../components/PatientBasicDetails';
 import PatientMedicalDetails from '../components/PatientMedicalDetails';
@@ -9,7 +8,7 @@ import { MedicalDetailsprovider, PatientsProvider } from '../utitlites/queries';
 
 export default function PatientDetailsLayout() {
     const params = useParams();
-    const db = usePGlite();
+
 
     const [patient, setPatient] = useState<any>(null);
     const [medical, setMedical] = useState<any>(null);
@@ -20,7 +19,7 @@ export default function PatientDetailsLayout() {
     const [showSidebar, setShowSideBar]=useState(false);
     const fetchPatient = async () => {
         const id = params.patientId;
-        if (!db || !id) return;
+        if (!id) return;
 
         try {
             const patientResult = await PatientsProvider.getInstance().findPatientById(id);
@@ -40,7 +39,7 @@ export default function PatientDetailsLayout() {
     };
     useEffect(() => {
         fetchPatient();
-    }, [db, params.patientId]);
+    }, [params.patientId]);
 
      useEffect(()=>{
         onBroadcastChange(async ()=>{
