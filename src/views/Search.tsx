@@ -6,15 +6,16 @@ import { PatientsProvider } from '../utitlites/queries';
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [patients, setPatients] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const paginationRequired=useMemo(()=>{
-    if(patients.length<10) return false;
+    if(patients.length<10 && currentPage===1) return false;
     return PatientsProvider.getInstance().getTotalPatients()>10;
   },[patients])
   const totalPages=useMemo(()=>{
     return Math.ceil( PatientsProvider.getInstance().getTotalPatients()/ 10);
   },[])
 
-  const [currentPage, setCurrentPage] = useState(1);
+
 
   const navigate = useNavigate();
 
