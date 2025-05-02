@@ -10,7 +10,7 @@ export default function SearchPage() {
   const paginationRequired=useMemo(()=>{
     if(patients.length<10 && currentPage===1) return false;
     return PatientsProvider.getInstance().getTotalPatients()>10;
-  },[patients])
+  },[patients, currentPage])
   const totalPages=useMemo(()=>{
     return Math.ceil( PatientsProvider.getInstance().getTotalPatients()/ 10);
   },[])
