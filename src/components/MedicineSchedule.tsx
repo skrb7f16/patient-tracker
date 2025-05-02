@@ -1,6 +1,6 @@
 import { usePGlite } from '@electric-sql/pglite-react';
 import React, { useEffect, useState } from 'react';
-import { broadcastChange } from '../utitlites/pglite-broadcast';
+import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcast';
 
 const MedicationSchedule = ({ medical }: { medical: any }) => {
 
@@ -11,6 +11,12 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
     useEffect(() => {
         fetchMedicines();
     }, [])
+
+    useEffect(()=>{
+        onBroadcastChange(()=>{
+            window.location.reload();
+        })
+    },[])
 
     const fetchMedicines = async () => {
         try {
@@ -94,9 +100,20 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
         setMedicationData([...medicationData, newRow]);
     };
 
-    const handleDeleteRow = (index: number) => {
+    const handleDeleteRow = async (index: number) => {
         const updatedData = medicationData.filter((_, i) => i !== index);
+
         setMedicationData(updatedData);
+        const deleteData=medicationData[index];
+        if(deleteData && deleteData.id){
+            try {
+                await db.query(`delete from medication_schedule where id = ${deleteData.id};`)
+                broadcastChange('db-updated');
+                await fetchMedicines()
+            }catch {
+                console.log("Something went wrong");
+            }
+        }
     };
 
     const getEndDate = (index: number) => {
