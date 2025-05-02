@@ -80,6 +80,21 @@ Powered by [`@electric-sql/pglite`](https://github.com/electric-sql/pglite), the
 ```bash
 npm install
 npm run dev
+```
 
+## For docker build
 ```bash
-docker build -t patient-records .
+docker build -t patient-records . && docker run -p 3000:80 patient-records
+```
+
+
+
+## 🔮 Future Scope
+
+- **Web Worker Sync**: Implement a background Web Worker that can periodically or manually send the entire patient database (or diffs) to a backend server for backup and centralized record-keeping.
+
+- **Cloud Backup & Restore**: Allow syncing of offline PGlite data to cloud storage and provide a restore mechanism for lost or transferred data.
+
+- **Role-Based Authentication**: Add login and access controls for doctors, admins, and front desk staff with different permissions and dashboard views.
+
+- **Appointment Scheduling**: Extend the app to handle appointment booking, availability tracking, and visit history.
