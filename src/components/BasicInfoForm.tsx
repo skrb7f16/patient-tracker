@@ -2,10 +2,17 @@ import { useState } from 'react';
 
 interface Props {
   onNext: (data: any) => void;
+  basicInfo: {
+    name: string,
+    age: string,
+    gender: string,
+    phone: string,
+    address: string
+  } | null
 }
 
-export default function BasicInfoForm({ onNext }: Props) {
-  const [formData, setFormData] = useState({
+export default function BasicInfoForm({ onNext, basicInfo }: Props) {
+  const [formData, setFormData] = useState(basicInfo || {
     name: '',
     age: '',
     gender: '',
@@ -38,6 +45,7 @@ export default function BasicInfoForm({ onNext }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
+      // localStorage.setItem('savedData', JSON.stringify(formData));
       onNext(formData);
     }
   };

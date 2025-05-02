@@ -1,6 +1,8 @@
 import { usePGlite } from '@electric-sql/pglite-react';
 import React, { useEffect, useState } from 'react';
 import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcast';
+import { MedicationScheduleProvider } from '../utitlites/queries';
+import { formatDate } from '../utitlites/helpers';
 
 const MedicationSchedule = ({ medical }: { medical: any }) => {
 
@@ -21,7 +23,7 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
     const fetchMedicines = async () => {
         try {
 
-            const result = await db.query(`select * from medication_schedule where patient_id=${medical.patient_id}`);
+            const result = await MedicationScheduleProvider.getInstance().getByPatientId(medical.patient_id) 
          
             if (result.rows.length > 0) {
                 setMedicationData([...(result as any).rows])
@@ -38,11 +40,7 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
 
         setMedicationData(updatedData);
     };
-    const formatDate = (date: Date) => {
-        if (!date) return ''
-        date = new Date(date);
-        return date.toISOString().split('T')[0]; // returns 'YYYY-MM-DD'
-    };
+  
     const handleEditToggle = async (index: number) => {
         if (editingIndex === -1) {
             setEditingIndex(index)
@@ -52,26 +50,10 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
      
             try {
                 if (changed.id) {
-                    await db.query(`update medication_schedule set medicine_name='${changed.medicine_name}', dose_per_day=${changed.dose_per_day}, no_of_days=${changed.no_of_days}, start_date='${formatDate(new Date(changed.start_date))}', end_date='${formatDate(new Date(changed.start_date))}' WHERE id=${changed.id};`);
-
+                    await MedicationScheduleProvider.getInstance().updateMedecines(changed);
                 } else {
-                    await db.exec(`
-                    INSERT INTO medication_schedule (
-                      patient_id,
-                      medicine_name,
-                      dose_per_day,
-                      no_of_days,
-                      start_date,
-                      end_date
-                    ) VALUES (
-                      ${changed.patient_id},
-                      '${changed.medicine_name}',
-                      ${changed.dose_per_day},
-                      ${changed.no_of_days},
-                     '${formatDate(new Date(changed.start_date))}',
-                    ' ${formatDate(new Date(changed.start_date))}'
-                    );
-                  `);
+              
+                await MedicationScheduleProvider.getInstance().addMedication(changed);
                 }
                 broadcastChange('db-update');
                 await fetchMedicines();

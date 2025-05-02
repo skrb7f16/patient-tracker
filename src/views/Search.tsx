@@ -1,28 +1,18 @@
 import { useState, useEffect } from 'react';
-import { usePGlite } from '@electric-sql/pglite-react';
 import {  useNavigate } from 'react-router-dom';
 import { onBroadcastChange } from '../utitlites/pglite-broadcast';
+import { PatientsProvider } from '../utitlites/queries';
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [patients, setPatients] = useState<any[]>([]);
-  const db = usePGlite(); 
+
   const navigate = useNavigate();
 
   const fetchPatients = async () => {
-    let query = `SELECT * FROM patients`;
-
-
-    if (searchTerm) {
-      query += ` WHERE LOWER(name) LIKE LOWER('%${searchTerm}%') OR phone LIKE LOWER('%${searchTerm}%');`;
-  
-    }
-
-    console.log(query)
-
-    // Execute the query to fetch patients
-    const results = await db.query(query);
-    console.log(results)
+   
+    const results = await PatientsProvider.getInstance().fetchPatients(searchTerm);
+ 
     setPatients(results.rows);
   };
 
@@ -50,7 +40,7 @@ export default function SearchPage() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-md rounded-xl">
-      <h2 className="text-2xl font-bold text-center mb-4">Search Patients</h2>
+      <h2 className="text-2xl font-bold text-center mb-4">Search PatientsProvider</h2>
 
       <form onSubmit={handleSearch} className="mb-6 flex item-center gap-6 w-full">
         

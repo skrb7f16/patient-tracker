@@ -5,6 +5,7 @@ import { broadcastChange, onBroadcastChange } from '../utitlites/pglite-broadcas
 import PatientBasicDetails from '../components/PatientBasicDetails';
 import PatientMedicalDetails from '../components/PatientMedicalDetails';
 import UpdateDiagnosisForm from '../components/UpdateDiagnosisForm';
+import { MedicalDetailsprovider, PatientsProvider } from '../utitlites/queries';
 
 export default function PatientDetailsLayout() {
     const params = useParams();
@@ -22,16 +23,15 @@ export default function PatientDetailsLayout() {
         if (!db || !id) return;
 
         try {
-            const patientResult = await db.query(`SELECT * FROM patients WHERE id = ${id}`);
-            const medicalResult: any = await db.query(`SELECT * FROM medical_details WHERE patient_id = ${id}`);
+            const patientResult = await PatientsProvider.getInstance().findPatientById(id);
+            const medicalResult: any = await  MedicalDetailsprovider.getInstance().getByPatientId(id)
             
             setPatient(patientResult.rows[0] || null);
             setMedical(medicalResult.rows[0] || null);
-            if(medicalResult.rows[0] && medicalResult.rows[0].consulted){
+            if(medicalResult && medicalResult.rows[0] && medicalResult.rows[0].consulted){
                 setConsulted(medicalResult.rows[0].consulted)
                 setPreliminaryDiagnosis(medicalResult.rows[0].preliminary_diagnosis)
                 setDoctor(medicalResult.rows[0].attending_doctor)
-
 
             }
         } catch (error) {
@@ -52,12 +52,9 @@ export default function PatientDetailsLayout() {
     const handleSave = async () => {
         if (patient && medical) {
           try {
-            await db.query(`
-              UPDATE medical_details
-              SET attending_doctor = '${doctor}', consulted = ${consulted}, preliminary_diagnosis = '${preliminaryDiagnosis}'
-              WHERE patient_id = ${patient.id};
-            `);
-            setShowSideBar(false); // Close the sidebar
+           
+            await MedicalDetailsprovider.getInstance().updateStatus({consulted, doctor, preliminaryDiagnosis, patientId: patient.id})
+            setShowSideBar(false); 
             broadcastChange('db-updated')
             await fetchPatient()
           } catch (error) {
