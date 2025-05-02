@@ -2,7 +2,7 @@
 
 const PatientBasicDetails = ({ patient, medical }: { patient: any, medical: any }) => {
     return (
-        <div className="w-1/4 p-6 bg-white shadow-md border-r overflow-y-auto">
+        <div className="md:w-1/4 w-full p-6 bg-white shadow-md border-r md:overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">Patient Info</h2>
             <div className="space-y-3 text-gray-700">
                 <p><strong>Name:</strong> {patient.name}</p>

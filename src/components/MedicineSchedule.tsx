@@ -115,9 +115,9 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 overflow-x-auto">
             <h2 className="text-2xl font-semibold mb-4">Medication Schedule</h2>
-            <table className="min-w-full table-auto border-collapse border border-gray-300">
+            <table className="min-w-full table-auto border-collapse border border-gray-300 ">
                 <thead>
                     <tr className="bg-gray-100">
 
@@ -131,7 +131,7 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
                 </thead>
                 <tbody>
                     {medicationData.map((item, index) => (
-                        <tr key={item.id} className="hover:bg-gray-50">
+                        <tr key={index} className="hover:bg-gray-50">
 
                             <td className="px-4 py-2 border border-gray-300">
                                 {editingIndex === index ? (

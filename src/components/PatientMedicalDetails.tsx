@@ -3,7 +3,7 @@ import MedicationSchedule from './MedicineSchedule'
 
 const PatientMedicalDetails = ({medical}: {medical: any}) => {
   return (
-    <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
+    <div className="flex-1 p-6 bg-gray-100 md:overflow-y-auto ">
     <h2 className="text-2xl font-semibold mb-4">Medical Details</h2>
     {medical ? (
         <><div className="grid grid-cols-1 md:grid-cols-2 gap-6">

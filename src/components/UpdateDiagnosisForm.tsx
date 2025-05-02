@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 const UpdateDiagnosisForm = ({doctor, setDoctor, consulted, setConsulted, preliminaryDiagnosis, setPreliminaryDiagnosis, handleSave }: {doctor: string, setDoctor: any, consulted: boolean, setConsulted: any, preliminaryDiagnosis: string, setPreliminaryDiagnosis: any, handleSave: any}) => {
@@ -8,8 +8,13 @@ const UpdateDiagnosisForm = ({doctor, setDoctor, consulted, setConsulted, prelim
       
     })
 
+    const [startValidation, setStartValidation]=useState(false)
+
     const validate = ()=>{
-      const errorUpdated = errors
+      const errorUpdated: any = {
+        doctor:'',
+        preliminaryDiagnosis: ''
+      }
       if(doctor.length<3){
         errorUpdated.doctor='Invalid Doctor'
       
@@ -22,10 +27,17 @@ const UpdateDiagnosisForm = ({doctor, setDoctor, consulted, setConsulted, prelim
       return false;
     }
     const saveDetails= ()=>{
+      setStartValidation(true)
       if(validate()){
         handleSave();
       }
     }
+
+    useEffect(()=>{
+      if(startValidation){
+        validate()
+      }
+    },[doctor, preliminaryDiagnosis, startValidation])
   
   return (
     <>
@@ -41,7 +53,7 @@ const UpdateDiagnosisForm = ({doctor, setDoctor, consulted, setConsulted, prelim
       onChange={(e) => setDoctor(e.target.value)}
       className="w-full p-2 border rounded-lg"
     />
-      <p className="m-0 text-red-600">{errors.doctor}</p>
+      <p className="m-0 text-xs text-red-600">{errors.doctor}</p>
   </div>
 
   <div>
@@ -64,7 +76,7 @@ const UpdateDiagnosisForm = ({doctor, setDoctor, consulted, setConsulted, prelim
       className="w-full p-2 border rounded-lg"
       rows={4}
     />
-    <p className="m-0 text-red-600">{errors.preliminaryDiagnosis}</p>
+    <p className="m-0 text-xs text-red-600">{errors.preliminaryDiagnosis}</p>
   </div>
 
   <button

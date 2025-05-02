@@ -66,7 +66,7 @@ export default function PatientDetailsLayout() {
     }
 
     return (
-        <div className="flex h-screen relative">
+        <div className="flex h-screen relative flex-col md:flex-row ">
          
             
             <PatientBasicDetails patient={patient} medical={medical}/>
@@ -74,7 +74,7 @@ export default function PatientDetailsLayout() {
             <PatientMedicalDetails medical={medical} />
           
 
-            <button className='absolute bottom-10 right-10 p-2 rounded-lg bg-blue-500 text-white' onClick={()=>setShowSideBar(true)}>
+            <button className='fixed bottom-10 right-10 p-2 rounded-lg bg-blue-500 text-white' onClick={()=>setShowSideBar(true)}>
                 Update Status
             </button>
 
