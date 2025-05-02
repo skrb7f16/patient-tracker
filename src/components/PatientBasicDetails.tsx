@@ -11,8 +11,8 @@ const PatientBasicDetails = ({ patient, medical }: { patient: any, medical: any 
                 <p><strong>Phone:</strong> {patient.phone}</p>
                 <p><strong>Address:</strong> {patient.address}</p>
 
-                <p><strong>Consulted</strong> {medical.consulted ? 'Yes' : 'No'} </p>
-                <p><strong>Doctor</strong> {medical.attending_doctor !== 'null' ? medical.attending_doctor : 'Not yet assigned'} </p>
+                <p><strong>Consulted</strong> {medical && medical.consulted ? 'Yes' : 'No'} </p>
+                <p><strong>Doctor</strong> {medical && medical.attending_doctor !== 'null' ? medical.attending_doctor : 'Not yet assigned'} </p>
 
 
             </div>

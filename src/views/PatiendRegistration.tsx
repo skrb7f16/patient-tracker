@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import BasicInfoForm from '../components/BasicInfoForm';
 import MedicalDetailsForm from '../components/MedicalDetailsForm';
-import { usePGlite } from '@electric-sql/pglite-react';
 import ResultPage from '../components/RegistrationResult';
 import { broadcastChange } from '../utitlites/pglite-broadcast';
+import { MedicalDetailsprovider, PatientsProvider } from '../utitlites/queries';
 
 export default function PatientRegistration() {
   const [step, setStep] = useState(1);
   const [basicInfo, setBasicInfo] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState<'success' | 'failure' | null>(null);
-  const db = usePGlite()
+
 
   const handleNext = (data: any) => {
     setBasicInfo(data);
@@ -30,11 +30,7 @@ export default function PatientRegistration() {
       const gender = escape(finalData.gender);
       const phone = escape(finalData.phone);
       const address = escape(finalData.address);
-      const resultSet: any = await db.query(`
-              INSERT INTO patients (name, age, gender, phone, address)
-              VALUES ($1, $2, $3, $4, $5)
-              RETURNING id;
-              `, [name, age, gender, phone, address]);
+      const resultSet: any = await PatientsProvider.getInstance().addPatient({name, age, gender, phone, address});
       console.log(resultSet)
       patientId = resultSet.rows[0]?.id;
       console.log(patientId)
@@ -44,10 +40,12 @@ export default function PatientRegistration() {
         const allergies = escape(finalData.allergies);
         const diseases = escape(finalData.diseases);
 
-        await db.exec(`
-        INSERT INTO medical_details (patient_id, blood_group, medical_history, allergies, diseases, attending_doctor, consulted, preliminary_diagnosis)
-        VALUES (${patientId}, '${bloodGroup}', '${medicalHistory}', '${allergies}', '${diseases}', '${null}', ${false}, '${null}')
-        `);
+        // await db.exec(`
+        // INSERT INTO medical_details (patient_id, blood_group, medical_history, allergies, diseases, attending_doctor, consulted, preliminary_diagnosis)
+        // VALUES (${patientId}, '${bloodGroup}', '${medicalHistory}', '${allergies}', '${diseases}', '${null}', ${false}, '${null}')
+        // `);
+
+        await MedicalDetailsprovider.getInstance().addMedicalDetails({patientId, bloodGroup, medicalHistory, allergies, diseases})
 
         alert('Patient Registered!');
         setSubmissionStatus('success')
@@ -70,7 +68,7 @@ export default function PatientRegistration() {
 
 
   return step === 1 ? (
-    <BasicInfoForm onNext={handleNext} />
+    <BasicInfoForm onNext={handleNext} basicInfo={basicInfo} />
   ) : (
     step === 2 ? <MedicalDetailsForm onBack={handleBack} onSubmit={handleSubmit} basicInfo={basicInfo} />
       : <ResultPage submissionStatus={submissionStatus}

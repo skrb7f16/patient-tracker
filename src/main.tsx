@@ -7,6 +7,7 @@ import { live } from '@electric-sql/pglite/live';
 import { PGliteProvider } from '@electric-sql/pglite-react';
 import { RouterProvider } from 'react-router-dom';
 import router from './router';
+import { MedicalDetailsprovider, MedicationScheduleProvider, PatientsProvider } from './utitlites/queries';
 
 async function initApp() {
   const db = await PGlite.create({
@@ -56,8 +57,9 @@ async function initApp() {
   end_date DATE 
 );
 `)
-
-
+  PatientsProvider.init(db);
+  MedicalDetailsprovider.init(db);
+  MedicationScheduleProvider.init(db)
   const rootEl = document.getElementById('root');
   if (!rootEl) throw new Error('Root element not found');
 

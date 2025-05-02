@@ -72,7 +72,7 @@ const PatientMedicalDetails = ({medical}: {medical: any}) => {
     }
         </div>
         {
-            medical.consulted && <div className="bg-white p-4 rounded-xl shadow mt-8">
+            medical && medical.consulted && <div className="bg-white p-4 rounded-xl shadow mt-8">
             <MedicationSchedule medical={medical}/>
         </div>
         }
