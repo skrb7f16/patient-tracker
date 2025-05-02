@@ -49,11 +49,11 @@ async function initApp() {
     CREATE TABLE IF NOT EXISTS medication_schedule (
   id SERIAL PRIMARY KEY,
   patient_id INTEGER REFERENCES patients(id),
-  medicine_name TEXT NOT NULL,
-  dose_per_day INTEGER NOT NULL,
-  no_of_days INTEGER NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL
+  medicine_name TEXT ,
+  dose_per_day INTEGER ,
+  no_of_days INTEGER ,
+  start_date DATE ,
+  end_date DATE 
 );
 `)
 

@@ -1,4 +1,4 @@
-import React from 'react'
+
 import MedicationSchedule from './MedicineSchedule'
 
 const PatientMedicalDetails = ({medical}: {medical: any}) => {
@@ -71,9 +71,12 @@ const PatientMedicalDetails = ({medical}: {medical: any}) => {
              </ul>
     }
         </div>
-        <div className="bg-white p-4 rounded-xl shadow mt-8">
-            <MedicationSchedule />
+        {
+            medical.consulted && <div className="bg-white p-4 rounded-xl shadow mt-8">
+            <MedicationSchedule medical={medical}/>
         </div>
+        }
+        
         </>
     ) : (
         <p className="text-gray-500">No medical details found.</p>
