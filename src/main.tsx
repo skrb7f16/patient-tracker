@@ -44,7 +44,19 @@ async function initApp() {
       preliminary_diagnosis TEXT
     );
   `);
- 
+
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS medication_schedule (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id),
+  medicine_name TEXT ,
+  dose_per_day INTEGER ,
+  no_of_days INTEGER ,
+  start_date DATE ,
+  end_date DATE 
+);
+`)
+
 
   const rootEl = document.getElementById('root');
   if (!rootEl) throw new Error('Root element not found');
