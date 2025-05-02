@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {  useNavigate } from 'react-router-dom';
 import { onBroadcastChange } from '../utitlites/pglite-broadcast';
 import { PatientsProvider } from '../utitlites/queries';
@@ -6,12 +6,21 @@ import { PatientsProvider } from '../utitlites/queries';
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [patients, setPatients] = useState<any[]>([]);
+  const paginationRequired=useMemo(()=>{
+    if(patients.length<10) return false;
+    return PatientsProvider.getInstance().getTotalPatients()>10;
+  },[patients])
+  const totalPages=useMemo(()=>{
+    return Math.ceil( PatientsProvider.getInstance().getTotalPatients()/ 10);
+  },[])
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
 
   const fetchPatients = async () => {
-   
-    const results = await PatientsProvider.getInstance().fetchPatients(searchTerm);
+    const offset = (currentPage -1) * 10;
+    const results = await PatientsProvider.getInstance().fetchPatients(searchTerm, offset);
  
     setPatients(results.rows);
   };
@@ -38,9 +47,13 @@ export default function SearchPage() {
     navigate(`/p/${id}`)
   }
 
+  useEffect(()=>{
+    fetchPatients();
+  },[currentPage])
+
   return (
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-md rounded-xl">
-      <h2 className="text-2xl font-bold text-center mb-4">Search PatientsProvider</h2>
+      <h2 className="text-2xl font-bold text-center mb-4">Search </h2>
 
       <form onSubmit={handleSearch} className="mb-6 flex item-center gap-6 w-full">
         
@@ -92,6 +105,28 @@ export default function SearchPage() {
           <p>No patients found</p>
         )}
       </div>
+      {
+        paginationRequired &&
+      <div className="mt-4 flex justify-center gap-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="self-center">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+      }
     </div>
   );
 }
