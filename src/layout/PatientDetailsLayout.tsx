@@ -42,11 +42,11 @@ export default function PatientDetailsLayout() {
     }, [params.patientId]);
 
      useEffect(()=>{
-        onBroadcastChange(async ()=>{
-         
-         window.location.reload();
-          
-        })
+          onBroadcastChange((event)=>{
+                   if(event === 'db-update'){
+                       window.location.reload();
+                   }
+               })
       },[])
     const handleSave = async () => {
         if (patient && medical) {
@@ -54,7 +54,7 @@ export default function PatientDetailsLayout() {
            
             await MedicalDetailsprovider.getInstance().updateStatus({consulted, doctor, preliminaryDiagnosis, patientId: patient.id})
             setShowSideBar(false); 
-            broadcastChange('db-updated')
+            broadcastChange('db-update')
             await fetchPatient()
           } catch (error) {
             console.error('Error updating medical details:', error);

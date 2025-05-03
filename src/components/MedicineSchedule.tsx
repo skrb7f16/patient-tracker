@@ -14,8 +14,11 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
     }, [])
 
     useEffect(()=>{
-        onBroadcastChange(()=>{
-            window.location.reload();
+        onBroadcastChange((event)=>{
+            console.log(event)
+            if(event === 'db-update'){
+                window.location.reload();
+            }
         })
     },[])
 
@@ -89,7 +92,7 @@ const MedicationSchedule = ({ medical }: { medical: any }) => {
         if(deleteData && deleteData.id){
             try {
                 await MedicationScheduleProvider.getInstance().deleteMedication(deleteData.id)
-                broadcastChange('db-updated');
+                broadcastChange('db-update');
                 await fetchMedicines()
             }catch {
                 console.log("Something went wrong");

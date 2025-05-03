@@ -43,10 +43,9 @@ export default function PatientRegistration() {
      
 
         await MedicalDetailsprovider.getInstance().addMedicalDetails({patientId, bloodGroup, medicalHistory, allergies, diseases})
-
-     
+        await PatientsProvider.getInstance().updateTotalPatients();
         setSubmissionStatus('success')
-        broadcastChange('db-updated', {
+        broadcastChange('db-update', {
           type: 'patient-added'
         });
       }
